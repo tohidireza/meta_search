@@ -28,22 +28,6 @@ def search_parsijoo(query):
     page = urlfile.read()
     soup = BeautifulSoup(page, "html.parser")
     result_url = soup.findAll('span', attrs={'class': 'result-url'})
-    # result_title = soup.findAll('span', attrs={'class': 'result-title'})
-    # result_desc = soup.findAll('span', attrs={'class': 'result-desc'})
-    # pprint(results)
-    i = 0
-    # for result in results:
-    #     print(
-    #         "---------------------------------------------------------------------------------------------"
-    #         "----------------------")
-    #     # header.a.string.encode('utf-8')
-    #     # k = header.a.get('href')
-    #     # u = k.decode('utf-8')
-    #     # u = u.rstrip('/')
-    #     print(result_title[i].text.encode('utf-8'))
-    #     # print(result.text.encode('utf-8'))
-    #     # print(result_desc[i].text.encode('utf-8'))
-    #     i += 1
 
     return result_url
 
@@ -57,22 +41,6 @@ def search_yooz(query):
     soup = BeautifulSoup(page, "html.parser")
 
     result_url = soup.findAll('span', attrs={'class': 'result-meta result__url'})
-    # result_title = soup.findAll('a', attrs={'class': 'resault__title__a'})
-    # result_desc = soup.findAll('div', attrs={'class': 'result__row result-body'})
-    # pprint(results)
-    # i = 0
-    # for result in results:
-    #     print(
-    #         "--------------------------------------------------------------------------------------------"
-    #         "-----------------------")
-    #     # header.a.string.encode('utf-8')
-    #     # k = header.a.get('href')
-    #     # u = k.decode('utf-8')
-    #     # u = u.rstrip('/')
-    #     print(result_title[i].text.encode('utf-8'))
-    #     # print(result.text.encode('utf-8'))
-    #     # print(result_desc[i].text.encode('utf-8'))
-    #     i += 1
 
     return result_url
 
@@ -152,7 +120,7 @@ def tf_idf(query, search_results):
     rlen = len(Rank)
     global final_link_results
     while (rlen > -1):
-        print Rank[rlen - 1]
+        print(Rank[rlen - 1])
         final_link_results.append(Rank[rlen - 1])
         rlen = rlen - 1
     # print "time taken: ",end-start
@@ -177,7 +145,7 @@ def web_of_trust(website):
     else:
         url = 'http://api.mywot.com/0.4/public_link_json2?hosts=' + website + '/&callback=process&key=f2611810521b7bb56215f0b2cacbd905257d7aa8'
     wot_score = 0
-    print "website is " + str(website)
+    print("website is " + str(website))
     response = urllib2.urlopen(url).read()
     # print " ** WEB of TRUST Results ** "
     # print response[8:-1]
@@ -214,18 +182,18 @@ def main():
     query = args.query
 
     if not query:
-        print 'Search query not entered!'
+        print('Search query not entered!')
         parser.print_usage()
     else:
 
         for key in cache:
             if (key == query):
-                print "\n###  Query fetched from cache ###### \n"
+                print("\n###  Query fetched from cache ###### \n")
                 post = cache[key]
                 for num in range(0, len(post)):
-                    print post[num]
+                    print(post[num])
                 exit()
-        print "\nQuery not present in cache ......... \n"
+        print("\nQuery not present in cache ......... \n")
         st = timeit.default_timer()
 
         parsi_result_url = search_parsijoo(query)
@@ -241,12 +209,12 @@ def main():
 
         uncommon_links = list(set(all_links) - set(common_links))
         #
-        print "\n\n ** Common links ** \n"
+        print("\n\n ** Common links ** \n")
         for element in common_links:
-            print element
-        print "\n\n ** Uncommon links ** \n "
+            print(element)
+        print("\n\n ** Uncommon links ** \n ")
         for element in uncommon_links:
-            print element
+            print(element)
         #
         global final_link_results
         final_link_results = []
@@ -266,9 +234,9 @@ def main():
         # # print len(final_link_results)
         analysis(len(common_links), len(list(set(all_links))))
         final_link_results = final_link_results[:10]
-        print "\n\n ** Top 10 Results ** \n\n"
+        print("\n\n ** Top 10 Results ** \n\n")
         for element in final_link_results:
-            print element
+            print(element)
         if len(cache) <= 50:
             cache[query] = list(final_link_results)
         else:
